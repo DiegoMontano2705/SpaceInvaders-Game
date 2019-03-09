@@ -14,15 +14,13 @@ import static java.lang.Math.abs;
  * @author Patricio y Diego
  */
 public class Bullet extends Item {
-    
-    private int velX;                       //to store the direction in X
     private int velY;                       //to store the direction in Y
     private int aux;                        // to store the velX in case of getting on the center
     private int width;                      //to store the width of the bullet
     private int height;                     //to store the height of the bullet
     private Game game;                      //to store the Game
     private Animation animationBullet;      //to store the animation of the bullet
-    private boolean endGame;                //to store the game status depending in bullet position
+    private boolean dead;                   //to store the status of the bullet
     
      /**
      * to create bullet with every attribute it have
@@ -38,19 +36,12 @@ public class Bullet extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
-        velX = 3;
-        velY = -3;
-        endGame = false;
+        velY = -10;
+        dead=false;
         this.animationBullet = new Animation(Assets.bullet,100);
     }
     
-    /**
-     * To get the direction in X of the bullet
-     * @return an <code>int</code> value with the direction
-     */
-    public int getVelX() {
-        return velX;
-    }
+
     
     /**
      * To get the direction in Y of the bullet
@@ -76,13 +67,6 @@ public class Bullet extends Item {
         return height;
     }
 
-    /**
-     * Set the direction in X of the bullet
-     * @param velX <b>velX</b> value with the direction
-     */
-    public void setVelX(int velX) {
-        this.velX = velX;
-    }
     
      /**
      * Set the direction in Y of the bullet
@@ -107,20 +91,14 @@ public class Bullet extends Item {
         this.height = height;
     }
     
-     /**
-     * To get the status of the game
-     * @return an <code>int</code> value with the width
-     */
-    public boolean isEndGame() {
-        return endGame;
+
+    public boolean isDead() {
+        return dead;
     }
     
-    /**
-     * Set the status of the game
-     * @param endGame <b>endGame</b> value with boolean
-     */
-    public void setEndGame(boolean endGame) {
-        this.endGame = endGame;
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
     }
     
     
@@ -128,25 +106,15 @@ public class Bullet extends Item {
     @Override
     public void tick() {
         //change animation of the bullet
+        if(!dead){
         this.animationBullet.tick();
-        
-            // change direction of x position and y position if colision
-            if (getX() + getWidth() > game.getWidth()) {
-                setVelX(-getVelX());
-            } else if (getX() < 0) {
-                setVelX(-getVelX());
-            }
-                   
-            if (getY()+getHeight() > game.getHeight()) {
-                endGame = true;
-                
-            } else if (getY() < 0) {
-                setVelY(-getVelY());
+                if (getY() < 0) {
+                dead=true;
             }
             
             //set direction of movement of the bullet
-            setX(getX() + velX);
             setY(getY() + velY);
+        }
     }
     
      public Rectangle getPerimetro() {
@@ -160,6 +128,7 @@ public class Bullet extends Item {
     
      @Override
     public void render(Graphics g) {
+        if(!dead)
         g.drawImage(animationBullet.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
     }
     

@@ -20,6 +20,7 @@ public class KeyManager implements KeyListener {
     public boolean pause = false;   //flag to pause the game
     public boolean save;        //flag to save
     public boolean load;        // flag to load
+    public boolean shoot;       //flag to shoot a bullet
 
     private boolean keys[];  // to store all the flags for every key
 
@@ -64,5 +65,6 @@ public class KeyManager implements KeyListener {
         right = keys[KeyEvent.VK_RIGHT];
         save = keys[KeyEvent.VK_G];
         load = keys[KeyEvent.VK_C];
+        shoot = keys[KeyEvent.VK_SPACE];
     }
 }

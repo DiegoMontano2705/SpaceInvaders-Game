@@ -17,7 +17,7 @@ public class Assets {
     public static BufferedImage spritesBullet;        // to store the sprites
     public static BufferedImage spritesPlayer;        // to store the sprites
     public static BufferedImage bullet[];      // to store pictures of the bullet changing color
-    public static BufferedImage brick[];       // to store the diferent bricks
+    public static BufferedImage alien;       // to store the alien image
     public static BufferedImage gameOver;      // to store gameover image
     public static BufferedImage youWin;        // to store youwin image
     public static BufferedImage powerUp;        // to store PowerUp image
@@ -32,12 +32,8 @@ public class Assets {
      */
     public static void init() {
         //getting the four diferente images that brick can have
-        brick = new BufferedImage[5];
         background = ImageLoader.loadImage("/images/space.jpg");
-        brick[0] = ImageLoader.loadImage("/images/alien.png");
-        brick[1] = ImageLoader.loadImage("/images/alien.png");
-        brick[2] = ImageLoader.loadImage("/images/alien.png");
-        brick[3] = ImageLoader.loadImage("/images/alien.png");       
+        alien = ImageLoader.loadImage("/images/alien.png");     
         gameOver = ImageLoader.loadImage("/images/gameover.jpg");
         youWin = ImageLoader.loadImage("/images/youwin.jpg");
         powerUp = ImageLoader.loadImage("/images/PowerUp.png");

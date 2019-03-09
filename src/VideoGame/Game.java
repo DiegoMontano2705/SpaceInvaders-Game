@@ -28,14 +28,15 @@ public class Game implements Runnable {
     private boolean running;        // to set the game
     private Player player;          // to use a player
     private Bullet bullet;          // to use a bullet
-    private ArrayList<Alien> alien;                // to use the aliens
+    private ArrayList<Alien> alien;    // to use the aliens
     private KeyManager keyManager;  // to manage the keyboard
     private int score;                 // to manage score
+    private boolean gameOver;           //to manage if the game is ended and you lose
     private boolean win;            // to manage if the game is ended and you win
-    private int countBricks;        // To store the total of bricks
     private Resources resources;    //To load and save the information of the game
-    private int bricksOnGame;       // To store the number of bricks in the game
+    private int aliensOnGame;       // To store the number of aliens in the game
     private LinkedList<PowerUp> powerUps;        //To store a powerUp
+    
 
     /**
      * to create title, width and height and set the game is still not running
@@ -107,23 +108,7 @@ public class Game implements Runnable {
         return bullet;
     }
 
-    /**
-     * To get the count of bricks
-     *
-     * @return an <code>int</code> value with brick count
-     */
-    public int getCountBricks() {
-        return countBricks;
-    }
 
-    /**
-     * Set the brick counter
-     *
-     * @param countBricks <b>countBrciks</b> value with the brick counter
-     */
-    public void setCountBricks(int countBricks) {
-        this.countBricks = countBricks;
-    }
         /**
      * To get the Powerups objects
      *
@@ -149,22 +134,20 @@ public class Game implements Runnable {
     public ArrayList<Alien> getalien() {
         return alien;
     }
-     /**
-     * To get the number of total bricks on the game
-     *
-     * @return an <code>int</code> value with bricksOnGame
-     */
-    public int getBricksOnGame() {
-        return bricksOnGame;
+
+    public int getAliensOnGame() {
+        return aliensOnGame;
     }
-     /**
-     * Set the total of bricks on the game
-     *
-     * @param bricksOnGame <b>bricksOnGame</b> value with brickOnGame
-     */
-    public void setBricksOnGame(int bricksOnGame) {
-        this.bricksOnGame = bricksOnGame;
+
+    public void setAliensOnGame(int aliensOnGame) {
+        this.aliensOnGame = aliensOnGame;
     }
+
+    public void setBullet(Bullet bullet) {
+        this.bullet = bullet;
+    }
+
+
 
     /**
      * initializing the display window of the game
@@ -172,8 +155,9 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        player = new Player(getWidth() / 2 - 75, getHeight() - 50, 1, 150, 50, this);
+        player = new Player(getWidth() / 2 - 75, getHeight() - 50, 1, 100, 50, this);
         bullet = new Bullet(player.getX() + (player.getWidth() / 2), player.getY() - 20, 20, 20, this);
+        bullet.setDead(true);
         powerUps = new LinkedList<PowerUp>();
 
         int iPosX;
@@ -192,9 +176,7 @@ public class Game implements Runnable {
                 iInd = (j) % 4;
                 iPosX = (i + 1) * 60;
                 iPosY = (j + 1) * 30;
-                countBricks = countBricks + 1;
-                bricksOnGame = bricksOnGame + 1;
-                alien.add(new Alien(iPosX, iPosY, 60, 30, this, iInd));
+                alien.add(new Alien(iPosX, iPosY, 60, 30, this));
             }
         }
 
@@ -206,10 +188,8 @@ public class Game implements Runnable {
         //Restart every value and object in the game 
         player.setX(getWidth() / 2 - 75);
         player.setY(getHeight() - 50);
-        bullet.setX(player.getX() + (player.getWidth() / 2));
-        bullet.setY(player.getY() - 20);
-        bullet.setVelY(-3);
-        bullet.setEndGame(false);
+        bullet.setDead(true);
+       
         int iPosX;
         int iPosY;
         int iRen;
@@ -220,16 +200,13 @@ public class Game implements Runnable {
         powerUps = new LinkedList<PowerUp>();
         score = 0;
         keyManager.setStart(false);
-        countBricks = 0;
         // Se escoje una mitad con direccion izquierda y la otra a la derecha
         for (int i = 0; i < (getWidth() / 60) - 1; i++) {
             for (int j = 0; j < ((getHeight() * 3 / 5) / 30) - 1; j++) {
                 iInd = (j) % 4;
                 iPosX = (i + 1) * 60;
                 iPosY = (j + 1) * 30;
-                countBricks = countBricks + 1;
-                bricksOnGame = bricksOnGame + 1;
-                alien.add(new Alien(iPosX, iPosY, 60, 30, this, iInd));
+                alien.add(new Alien(iPosX, iPosY, 60, 30, this));
             }
         }
     }
@@ -271,7 +248,7 @@ public class Game implements Runnable {
 
     private void tick() {
         //Resets game if you press any key in GameOver or You Win screen
-        if ((win || bullet.isEndGame()) && keyManager.start) {
+        if ((win || gameOver) && keyManager.start) {
             this.reset();
             win = false;
         } else {
@@ -288,74 +265,38 @@ public class Game implements Runnable {
             if (!keyManager.pause && keyManager.start) {
                 player.tick();
                 bullet.tick();
-                //Set direction of bullet depending on which part of the player the bullet hits
-                if (player.intersecta(bullet)) {
-                    bullet.setVelY(-Math.abs(bullet.getVelY()));
-                    if ((bullet.getX() < (player.getX() + player.getWidth() / 2))) {
-                        bullet.setVelX(-Math.abs(bullet.getVelX()));
-                    } else {
-                        bullet.setVelX(Math.abs(bullet.getVelX()));
-                    }
-                }
-                //creates bricks      
-                bricksOnGame= alien.size()-1;
+
+                aliensOnGame= alien.size();
                 for (int i = 0; i < alien.size(); i++) {
                     Alien aliens = alien.get(i);
                     aliens.tick();
                     if(aliens.isDead()){
-                     bricksOnGame = bricksOnGame - 1;
+                     aliensOnGame = aliensOnGame - 1;
                     }
                     //checks if bullet intersects brick
-                    if (bullet.intersecta(aliens) && !aliens.isDead()) {
-                        //change direction of bullet depending where it hits in X
-                        if ((bullet.getX() < (aliens.getX() + aliens.getWidth() / 2))) {
-                            bullet.setVelX(-Math.abs(bullet.getVelX()));
-                        } else {
-                            bullet.setVelX(Math.abs(bullet.getVelX()));
-                        }
-                        //change direction of bullet depending where it hits in Y
-                        if ((bullet.getY() > (aliens.getY() + aliens.getHeight() / 2))) {
-                            bullet.setVelY(Math.abs(bullet.getVelY()));
-                        } else {
-                            bullet.setVelY(-Math.abs(bullet.getVelY()));
-                        }
+                    if (bullet.intersecta(aliens) && !aliens.isDead() && !bullet.isDead()) {
+                        bullet.setDead(true);
                         //Add points to score
                         score = score + 10;
                         //Plays sound everytime bullet hits brick
                         Assets.bounce.play();
-                        aliens.setIndex(aliens.getIndex() - 1);
+                        aliens.setDead(true);
 
-                        if (((int) (Math.random() * 20)) == 1) {
+                        /*if (((int) (Math.random() * 20)) == 1) {
                             powerUps.add(new PowerUp(aliens.getX(), aliens.getY(), this));
                         }
+                        */
 
-                    }
-                }
-                //Create powerUps tick
-                for (int i = 0; i < powerUps.size(); i++) {
-                    PowerUp power = powerUps.get(i);
-                    power.tick();
-                    //If the player gets a power every brick life descrease by one
-                    if (power.intersecta(getPlayer())) {
-                        for (int k = 0; k < countBricks; k++) {
-                            score = score + 10;
-
-                            alien.get(k).setIndex(alien.get(k).getIndex() - 1);
-                        }
-                        powerUps.remove(i);
-                    }
-                    if (power.getY() > height) {
-                        powerUps.remove(i);
                     }
                 }
 
                 // If there are no more bricks in the game (When you get 650 points), active bullet.EndGame to show Game Over image
-                if (bricksOnGame <= 0) {
+                if (aliensOnGame <= 0) {
                     win = true;
                     keyManager.setStart(false);
                     Assets.applause.play();
                 }
-                if (bullet.isEndGame()) {
+                if (gameOver) {
                     keyManager.setStart(false);
                     Assets.boo.play();
                 }
@@ -380,7 +321,7 @@ public class Game implements Runnable {
             g = bs.getDrawGraphics();
 
             //Shows Game Over image and stop  the game if the bullet get to the bottom of the display
-            if (bullet.isEndGame()) {
+            if (gameOver) {
                 g.drawImage(Assets.gameOver, 0, 0, width, height, null);
                 //Set font color to white for the text of Lifes Left:
                 g.setColor(Color.white);
