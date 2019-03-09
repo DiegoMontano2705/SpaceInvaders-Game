@@ -6,6 +6,7 @@
 package VideoGame;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import static java.lang.Math.abs;
@@ -169,7 +170,6 @@ public class Game implements Runnable {
         // creating my bricks list
         alien = new ArrayList<Alien>();
         score = 0;
-        keyManager.setStart(false);
         // Se escoje una mitad con direccion izquierda y la otra a la derecha
         for (int i = 0; i < (getWidth() / 60) - 1; i++) {
             for (int j = 0; j < ((getHeight() * 3 / 5) / 30) - 1; j++) {
@@ -199,7 +199,6 @@ public class Game implements Runnable {
         alien = new ArrayList<Alien>();
         powerUps = new LinkedList<PowerUp>();
         score = 0;
-        keyManager.setStart(false);
         // Se escoje una mitad con direccion izquierda y la otra a la derecha
         for (int i = 0; i < (getWidth() / 60) - 1; i++) {
             for (int j = 0; j < ((getHeight() * 3 / 5) / 30) - 1; j++) {
@@ -248,7 +247,7 @@ public class Game implements Runnable {
 
     private void tick() {
         //Resets game if you press any key in GameOver or You Win screen
-        if ((win || gameOver) && keyManager.start) {
+        if (win || gameOver) {
             this.reset();
             win = false;
         } else {
@@ -262,7 +261,7 @@ public class Game implements Runnable {
             }
 
             // avancing player and bricks and check collisions 
-            if (!keyManager.pause && keyManager.start) {
+            if (!keyManager.pause) {
                 player.tick();
                 bullet.tick();
 
@@ -292,12 +291,10 @@ public class Game implements Runnable {
 
                 // If there are no more bricks in the game (When you get 650 points), active bullet.EndGame to show Game Over image
                 if (aliensOnGame <= 0) {
-                    win = true;
-                    keyManager.setStart(false);
+                    win = true; 
                     Assets.applause.play();
                 }
-                if (gameOver) {
-                    keyManager.setStart(false);
+                if (gameOver) {                    
                     Assets.boo.play();
                 }
             }
@@ -349,6 +346,12 @@ public class Game implements Runnable {
                 //Set font color to white for the text of Lifes Left:
                 g.setColor(Color.white);
                 g.drawString("Score:" + this.getScore(), getWidth() - 100, getHeight() - 20);
+                if(keyManager.pause){
+                g.setColor(Color.DARK_GRAY);
+                g.fillRect(width/3, height*2/5, width/3, height/5);
+                g.setColor(Color.white);
+                g.drawString("Game Paused (Press P to continue)",width/3+27, height/2+3);
+                }
             }
             bs.show();
 
