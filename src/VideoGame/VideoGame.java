@@ -3,19 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package spaceinvadersvideogame;
+package VideoGame;
 
 /**
  *
- * @author yeyog
+ * @author Patricio y diego
  */
-public class SpaceInvadersVideogame {
+public class VideoGame {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        // All code application logic here
+        Game g = new Game("Juego", 800, 500);
+        g.start();
     }
     
 }
