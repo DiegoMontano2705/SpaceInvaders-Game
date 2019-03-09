@@ -36,9 +36,9 @@ public class Resources {
             fw.write(String.valueOf(game.getPlayer().getY()) + "\n");
             fw.write(String.valueOf(game.getBullet().getX()) + "\n");
             fw.write(String.valueOf(game.getBullet().getY()) + "\n");
-            fw.write(String.valueOf(game.getBullet().getVelX()) + "\n");
             fw.write(String.valueOf(game.getBullet().getVelY()) + "\n");
-            fw.write(String.valueOf(game.getBricksOnGame()) + "\n");
+            //fw.write(String.valueOf(game.getBricksOnGame()) + "\n");
+            /*
             for (int i = 0; i < game.getCountBricks(); i++) {
                 fw.write(String.valueOf(game.getBricks().get(i).getX()) + "\n");
                 fw.write(String.valueOf(game.getBricks().get(i).getY()) + "\n");
@@ -49,6 +49,7 @@ public class Resources {
                 fw.write(String.valueOf(game.getPowerUps().get(i).getX()) + "\n");
                 fw.write(String.valueOf(game.getPowerUps().get(i).getY()) + "\n");
             }
+            */
             fw.close();
         } catch (IOException ex) {
             Logger.getLogger(Resources.class.getName()).log(Level.SEVERE, null, ex);
@@ -66,10 +67,9 @@ public class Resources {
             game.getPlayer().setY(Integer.parseInt(br.readLine()));
             game.getBullet().setX(Integer.parseInt(br.readLine()));
             game.getBullet().setY(Integer.parseInt(br.readLine()));
-            game.getBullet().setVelX(Integer.parseInt(br.readLine()));
             game.getBullet().setVelY(Integer.parseInt(br.readLine()));
-            game.setBricksOnGame(Integer.parseInt(br.readLine()));
-            for (int i = 0; i < game.getCountBricks(); i++) {
+            //game.setBricksOnGame(Integer.parseInt(br.readLine()));
+            /*for (int i = 0; i < game.getCountBricks(); i++) {
                 game.getBricks().get(i).setX(Integer.parseInt(br.readLine()));
                 game.getBricks().get(i).setY(Integer.parseInt(br.readLine()));
                 game.getBricks().get(i).setIndex(Integer.parseInt(br.readLine()));
@@ -81,6 +81,7 @@ public class Resources {
                 powerUps.add(power);
             }
             game.setPowerUps(powerUps);
+            */
             br.close();
 
         } catch (IOException ex) {

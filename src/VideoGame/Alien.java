@@ -29,12 +29,11 @@ public class Alien extends Item {
      * @param height to set the height of the brick
      * @param Game to set the game where the brick is created
      */
-    public Alien(int x, int y, int width, int height, Game game, int index) {
+    public Alien(int x, int y, int width, int height, Game game) {
         super(x, y);
         this.width = width;
         this.height = height;
         this.game = game;
-        this.index = index;
         dead= false;
     }
      /**
@@ -93,10 +92,7 @@ public class Alien extends Item {
 
     @Override
     public void tick() {
-    if(index <0){
-        dead=true;
-    }else
-        dead=false;
+        //Moverlos
     }
 
     public Rectangle getPerimetro() {
@@ -107,6 +103,6 @@ public class Alien extends Item {
     @Override
     public void render(Graphics g) {
         if(index>=0)
-        g.drawImage(Assets.brick[index], getX(), getY(), getWidth(), getHeight(), null);
+        g.drawImage(Assets.alien, getX(), getY(), getWidth(), getHeight(), null);
     }
 }

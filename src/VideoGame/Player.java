@@ -92,13 +92,16 @@ public class Player extends Item {
             if (game.getKeyManager().right) {
                 setX(getX() + speed);//Right
             }
+            if(game.getKeyManager().shoot && game.getBullet().isDead()){
+                game.setBullet(new Bullet(x-10+width/2, y, 20, 20, game));
+            }
         
             
             // reset x position and y position if colision
-            if (getX() + 150 > game.getWidth()) {
-                setX(game.getWidth() - 150);
-            } else if (getX() < 0) {
-                setX(0);
+            if (getX() + width/2 > game.getWidth()) {
+                setX(game.getWidth() - width/2);
+            } else if (getX() < -width/2) {
+                setX(-width/2);
             }
     }
     
@@ -110,7 +113,7 @@ public class Player extends Item {
     
     public boolean intersecta(Object obj) {
 
-        return obj instanceof Bullet && getPerimetro().intersects(((Bullet) obj).getPerimetro());
+        return obj instanceof Alien && getPerimetro().intersects(((Alien) obj).getPerimetro());
     }
 
     @Override
