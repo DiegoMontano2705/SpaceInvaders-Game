@@ -17,8 +17,8 @@ public class Alien extends Item {
     private int width;
     private int height;
     private Game game;
-    private int index;
     private boolean dead;
+    private int direction;
     
      /**
      * to create brick with every attribute it have
@@ -79,20 +79,23 @@ public class Alien extends Item {
         this.height = height;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public int getDirection() {
+        return direction;
     }
 
-    public int getIndex() {
-        return index;
+    public void setDirection(int direction) {
+        this.direction = direction;
     }
+
     
     
 
 
     @Override
     public void tick() {
-        //Moverlos
+        direction= game.getAlienDirection();
+        x= x+ direction;
+    
     }
 
     public Rectangle getPerimetro() {
@@ -102,7 +105,7 @@ public class Alien extends Item {
 
     @Override
     public void render(Graphics g) {
-        if(index>=0)
+        if(!dead)
         g.drawImage(Assets.alien, getX(), getY(), getWidth(), getHeight(), null);
     }
 }
