@@ -31,19 +31,20 @@ public class Resources {
             //Creates new file to save the game data
             FileWriter fw = new FileWriter("save.txt");
             //Saves every value of every object in the game
+            fw.write(String.valueOf(game.getAlienDirection() + "\n"));
             fw.write(String.valueOf(game.getScore()) + "\n");
             fw.write(String.valueOf(game.getPlayer().getX()) + "\n");
             fw.write(String.valueOf(game.getPlayer().getY()) + "\n");
             fw.write(String.valueOf(game.getBullet().getX()) + "\n");
             fw.write(String.valueOf(game.getBullet().getY()) + "\n");
             fw.write(String.valueOf(game.getBullet().getVelY()) + "\n");
-            //fw.write(String.valueOf(game.getBricksOnGame()) + "\n");
-            /*
-            for (int i = 0; i < game.getCountBricks(); i++) {
-                fw.write(String.valueOf(game.getBricks().get(i).getX()) + "\n");
-                fw.write(String.valueOf(game.getBricks().get(i).getY()) + "\n");
-                fw.write(String.valueOf(game.getBricks().get(i).getIndex()) + "\n");
+            fw.write(String.valueOf(game.getBullet().isDead()) + "\n");
+            for (int i = 0; i < game.getalien().size(); i++) {
+                fw.write(String.valueOf(game.getalien().get(i).getX()) + "\n");
+                fw.write(String.valueOf(game.getalien().get(i).getY()) + "\n");
+                fw.write(String.valueOf(game.getalien().get(i).isDead()) + "\n");
             }
+            /*
             fw.write(String.valueOf(game.getPowerUps().size()) + "\n");
             for (int i = 0; i < game.getPowerUps().size(); i++) {
                 fw.write(String.valueOf(game.getPowerUps().get(i).getX()) + "\n");
@@ -62,18 +63,21 @@ public class Resources {
             //Loads file where every value of the game was saved
             BufferedReader br = new BufferedReader(new FileReader("save.txt"));
             //Read every value in the file so it can be loaded
+            game.setAlienDirection(Integer.parseInt(br.readLine()));
             game.setScore(Integer.parseInt(br.readLine()));
             game.getPlayer().setX(Integer.parseInt(br.readLine()));
             game.getPlayer().setY(Integer.parseInt(br.readLine()));
             game.getBullet().setX(Integer.parseInt(br.readLine()));
             game.getBullet().setY(Integer.parseInt(br.readLine()));
             game.getBullet().setVelY(Integer.parseInt(br.readLine()));
-            //game.setBricksOnGame(Integer.parseInt(br.readLine()));
-            /*for (int i = 0; i < game.getCountBricks(); i++) {
-                game.getBricks().get(i).setX(Integer.parseInt(br.readLine()));
-                game.getBricks().get(i).setY(Integer.parseInt(br.readLine()));
-                game.getBricks().get(i).setIndex(Integer.parseInt(br.readLine()));
+            game.getBullet().setDead(Boolean.parseBoolean(br.readLine()));
+            
+            for (int i = 0; i < game.getalien().size(); i++) {
+                game.getalien().get(i).setX(Integer.parseInt(br.readLine()));
+                game.getalien().get(i).setY(Integer.parseInt(br.readLine()));
+                game.getalien().get(i).setDead(Boolean.parseBoolean(br.readLine()));
             }
+            /*
             powerUps = new LinkedList<PowerUp>();
             size = Integer.parseInt(br.readLine());
             for (int i = 0; i < size; i++) {

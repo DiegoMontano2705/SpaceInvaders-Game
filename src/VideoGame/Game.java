@@ -7,6 +7,7 @@ package VideoGame;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import static java.lang.Math.abs;
@@ -36,8 +37,8 @@ public class Game implements Runnable {
     private boolean win;            // to manage if the game is ended and you win
     private Resources resources;    //To load and save the information of the game
     private int aliensOnGame;       // To store the number of aliens in the game
+    private int alienDirection;
     private LinkedList<PowerUp> powerUps;        //To store a powerUp
-    
 
     /**
      * to create title, width and height and set the game is still not running
@@ -109,8 +110,7 @@ public class Game implements Runnable {
         return bullet;
     }
 
-
-        /**
+    /**
      * To get the Powerups objects
      *
      * @return an <code>LinkedList</code> value with powerUps
@@ -118,7 +118,8 @@ public class Game implements Runnable {
     public LinkedList<PowerUp> getPowerUps() {
         return powerUps;
     }
-     /**
+
+    /**
      * Set the powerUps objects
      *
      * @param powerUps <b>PowerUp</b> value with powerUps
@@ -148,7 +149,14 @@ public class Game implements Runnable {
         this.bullet = bullet;
     }
 
+    public int getAlienDirection() {
+        return alienDirection;
+    }
 
+    public void setAlienDirection(int alienDirection) {
+        this.alienDirection = alienDirection;
+    }
+    
 
     /**
      * initializing the display window of the game
@@ -160,7 +168,7 @@ public class Game implements Runnable {
         bullet = new Bullet(player.getX() + (player.getWidth() / 2), player.getY() - 20, 20, 20, this);
         bullet.setDead(true);
         powerUps = new LinkedList<PowerUp>();
-
+        alienDirection=1;
         int iPosX;
         int iPosY;
         int iRen;
@@ -171,8 +179,8 @@ public class Game implements Runnable {
         alien = new ArrayList<Alien>();
         score = 0;
         // Se escoje una mitad con direccion izquierda y la otra a la derecha
-        for (int i = 0; i < (getWidth() / 60) - 1; i++) {
-            for (int j = 0; j < ((getHeight() * 3 / 5) / 30) - 1; j++) {
+        for (int j = 0; j < ((getHeight() * 4 / 7) / 30) - 1; j++) {
+            for (int i = 0; i < (getWidth() / 60) - 1; i++) {
                 iInd = (j) % 4;
                 iPosX = (i + 1) * 60;
                 iPosY = (j + 1) * 30;
@@ -189,7 +197,7 @@ public class Game implements Runnable {
         player.setX(getWidth() / 2 - 75);
         player.setY(getHeight() - 50);
         bullet.setDead(true);
-       
+        alienDirection=1;
         int iPosX;
         int iPosY;
         int iRen;
@@ -200,8 +208,8 @@ public class Game implements Runnable {
         powerUps = new LinkedList<PowerUp>();
         score = 0;
         // Se escoje una mitad con direccion izquierda y la otra a la derecha
-        for (int i = 0; i < (getWidth() / 60) - 1; i++) {
-            for (int j = 0; j < ((getHeight() * 3 / 5) / 30) - 1; j++) {
+        for (int j = 0; j < ((getHeight() * 4 / 7) / 30) - 1; j++) {
+            for (int i = 0; i < (getWidth() / 60) - 1; i++) {
                 iInd = (j) % 4;
                 iPosX = (i + 1) * 60;
                 iPosY = (j + 1) * 30;
@@ -259,19 +267,31 @@ public class Game implements Runnable {
             if (keyManager.load) {
                 resources.loadGame();
             }
+            if(keyManager.reset){
+                this.reset();
+            }
 
             // avancing player and bricks and check collisions 
             if (!keyManager.pause) {
                 player.tick();
                 bullet.tick();
 
-                aliensOnGame= alien.size();
+                aliensOnGame = alien.size();
                 for (int i = 0; i < alien.size(); i++) {
                     Alien aliens = alien.get(i);
-                    aliens.tick();
-                    if(aliens.isDead()){
-                     aliensOnGame = aliensOnGame - 1;
-                    }
+                    
+                    if (aliens.isDead()) {
+                        aliensOnGame = aliensOnGame - 1;
+                    } 
+                        if ((aliens.getX() + aliens.getWidth() >= width && alienDirection!= -1) || (aliens.getX() <= 0 && alienDirection!= 1)) {
+                                alienDirection= alienDirection*-1;
+                                alien.forEach((alien2) -> {
+                                    alien2.setY(alien2.getY()+10);
+                        });
+                       
+                        }
+                         aliens.tick();
+                    
                     //checks if bullet intersects brick
                     if (bullet.intersecta(aliens) && !aliens.isDead() && !bullet.isDead()) {
                         bullet.setDead(true);
@@ -284,17 +304,16 @@ public class Game implements Runnable {
                         /*if (((int) (Math.random() * 20)) == 1) {
                             powerUps.add(new PowerUp(aliens.getX(), aliens.getY(), this));
                         }
-                        */
-
+                         */
                     }
                 }
 
                 // If there are no more bricks in the game (When you get 650 points), active bullet.EndGame to show Game Over image
                 if (aliensOnGame <= 0) {
-                    win = true; 
+                    win = true;
                     Assets.applause.play();
                 }
-                if (gameOver) {                    
+                if (gameOver) {
                     Assets.boo.play();
                 }
             }
@@ -344,13 +363,18 @@ public class Game implements Runnable {
                     power.render(g);
                 }
                 //Set font color to white for the text of Lifes Left:
+                Font small = new Font("Helvetica", Font.BOLD, 14);
+                g.setFont(small);
                 g.setColor(Color.white);
                 g.drawString("Score:" + this.getScore(), getWidth() - 100, getHeight() - 20);
-                if(keyManager.pause){
-                g.setColor(Color.DARK_GRAY);
-                g.fillRect(width/3, height*2/5, width/3, height/5);
-                g.setColor(Color.white);
-                g.drawString("Game Paused (Press P to continue)",width/3+27, height/2+3);
+                if (keyManager.pause) {
+                    g.setColor(new Color(0, 32, 48));
+                    g.fillRect(50, width / 2 - 30, width - 100, 50);
+                    g.setColor(Color.white);
+                    g.drawRect(50, width / 2 - 30, width - 100, 50);
+                    g.setColor(Color.white);
+                    String message = "Game Paused (Press P to continue)";
+                    g.drawString(message, (width - ((small.getSize() / 2) * message.length())) / 2, width / 2);
                 }
             }
             bs.show();
