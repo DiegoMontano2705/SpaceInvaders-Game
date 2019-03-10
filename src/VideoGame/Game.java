@@ -156,7 +156,6 @@ public class Game implements Runnable {
     public void setAlienDirection(int alienDirection) {
         this.alienDirection = alienDirection;
     }
-    
 
     /**
      * initializing the display window of the game
@@ -168,12 +167,13 @@ public class Game implements Runnable {
         bullet = new Bullet(player.getX() + (player.getWidth() / 2), player.getY() - 20, 20, 20, this);
         bullet.setDead(true);
         powerUps = new LinkedList<PowerUp>();
-        alienDirection=1;
+        alienDirection = 1;
         int iPosX;
         int iPosY;
         int iRen;
         int iCol;
         int iInd;
+        gameOver = false;
         win = false;
         // creating my bricks list
         alien = new ArrayList<Alien>();
@@ -197,7 +197,9 @@ public class Game implements Runnable {
         player.setX(getWidth() / 2 - 75);
         player.setY(getHeight() - 50);
         bullet.setDead(true);
-        alienDirection=1;
+        alienDirection = 1;
+        gameOver=false;
+        win=false;
         int iPosX;
         int iPosY;
         int iRen;
@@ -255,11 +257,7 @@ public class Game implements Runnable {
 
     private void tick() {
         //Resets game if you press any key in GameOver or You Win screen
-        if (win || gameOver) {
-            this.reset();
-            win = false;
-        } else {
-            //saves and load game tick
+        //saves and load game tick
             keyManager.tick();
             if (keyManager.save) {
                 resources.saveGame();
@@ -267,9 +265,10 @@ public class Game implements Runnable {
             if (keyManager.load) {
                 resources.loadGame();
             }
-            if(keyManager.reset){
+            if (keyManager.reset) {
                 this.reset();
             }
+        if (!(gameOver || win)) {
 
             // avancing player and bricks and check collisions 
             if (!keyManager.pause) {
@@ -279,19 +278,19 @@ public class Game implements Runnable {
                 aliensOnGame = alien.size();
                 for (int i = 0; i < alien.size(); i++) {
                     Alien aliens = alien.get(i);
-                    
+
                     if (aliens.isDead()) {
                         aliensOnGame = aliensOnGame - 1;
-                    } 
-                        if ((aliens.getX() + aliens.getWidth() >= width && alienDirection!= -1) || (aliens.getX() <= 0 && alienDirection!= 1)) {
-                                alienDirection= alienDirection*-1;
-                                alien.forEach((alien2) -> {
-                                    alien2.setY(alien2.getY()+10);
+                    }
+                    if ((aliens.getX() + aliens.getWidth() >= width && alienDirection != -1) || (aliens.getX() <= 0 && alienDirection != 1)) {
+                        alienDirection = alienDirection * -1;
+                        alien.forEach((alien2) -> {
+                            alien2.setY(alien2.getY() + 30);
                         });
-                       
-                        }
-                         aliens.tick();
-                    
+
+                    }
+                    aliens.tick();
+
                     //checks if bullet intersects brick
                     if (bullet.intersecta(aliens) && !aliens.isDead() && !bullet.isDead()) {
                         bullet.setDead(true);
@@ -305,6 +304,9 @@ public class Game implements Runnable {
                             powerUps.add(new PowerUp(aliens.getX(), aliens.getY(), this));
                         }
                          */
+                    }
+                    if (aliens.getY() > height - 30 && !aliens.isDead()) {
+                        gameOver = true;
                     }
                 }
 
@@ -341,12 +343,12 @@ public class Game implements Runnable {
                 g.drawImage(Assets.gameOver, 0, 0, width, height, null);
                 //Set font color to white for the text of Lifes Left:
                 g.setColor(Color.white);
-                g.drawString("Press any button to restart", getWidth() / 2 - 90, getHeight() - 50);
+                g.drawString("Press R button to restart", getWidth() / 2 - 90, getHeight() - 50);
                 //Shows You Win image and stop the game if there are not more bricks in the game
             } else if (win) {
                 g.drawImage(Assets.youWin, 0, 0, width, height, null);
                 g.setColor(Color.white);
-                g.drawString("Press any button to restart", getWidth() / 2 - 90, getHeight() - 50);
+                g.drawString("Press R button to restart", getWidth() / 2 - 90, getHeight() - 50);
                 //If the game hasn´t end, the game is painted
             } else {
                 g.drawImage(Assets.background, 0, 0, width, height, null);
