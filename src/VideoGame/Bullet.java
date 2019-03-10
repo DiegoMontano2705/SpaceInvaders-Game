@@ -15,7 +15,6 @@ import static java.lang.Math.abs;
  */
 public class Bullet extends Item {
     private int velY;                       //to store the direction in Y
-    private int aux;                        // to store the velX in case of getting on the center
     private int width;                      //to store the width of the bullet
     private int height;                     //to store the height of the bullet
     private Game game;                      //to store the Game
@@ -91,12 +90,18 @@ public class Bullet extends Item {
         this.height = height;
     }
     
-
+    /**
+     * To get the status the bullet
+     * @return an <code>boolean</code> value with the status
+     */
     public boolean isDead() {
         return dead;
     }
     
-
+    /**
+     * Set the status of the bullet
+     * @param dead <b>dead</b> value with the bullet
+     */
     public void setDead(boolean dead) {
         this.dead = dead;
     }

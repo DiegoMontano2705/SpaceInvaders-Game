@@ -13,29 +13,28 @@ import java.awt.Rectangle;
  * @author Patricio y Diego
  */
 public class Bomb extends Item {
-   private int velY;                       //to store the direction in Y
-    private int aux;                        // to store the velX in case of getting on the center
-    private int width;                      //to store the width of the bullet
-    private int height;                     //to store the height of the bullet
+    private int velY;                       //to store the direction in Y
+    private int width;                      //to store the width of the bomb
+    private int height;                     //to store the height of the bomb
     private Game game;                      //to store the Game
-    private Animation animationBomb;      //to store the animation of the bullet
-    private boolean dead;                   //to store the status of the bullet
+    private Animation animationBomb;      //to store the animation of the bomb
+    private boolean dead;                   //to store the status of the bomb
     
      /**
      * to create bullet with every attribute it have
      *
      * @param x to set the x position
      * @param y to set the y position
-     * @param width to set the width of the bullet
-     * @param height to set the height of the bullet
-     * @param Game to set the game where the bullet is created
+     * @param width to set the width of the bomb
+     * @param height to set the height of the bomb
+     * @param Game to set the game where the bomb is created
      */
     public Bomb(int x, int y, int width, int height, Game game) {
         super(x, y);
         this.width = width;
         this.height = height;
         this.game = game;
-        velY = -10;
+        velY = -2;
         dead=true;
         this.animationBomb = new Animation(Assets.bomb,100);
     }
@@ -43,7 +42,7 @@ public class Bomb extends Item {
 
     
     /**
-     * To get the direction in Y of the bullet
+     * To get the direction in Y of the bomb
      * @return an <code>int</code> value with the direction
      */
     public int getVelY() {
@@ -51,7 +50,7 @@ public class Bomb extends Item {
     }
     
     /**
-     * To get the width of the bullet
+     * To get the width of the bomb
      * @return an <code>int</code> value with the width
      */
     public int getWidth() {
@@ -59,7 +58,7 @@ public class Bomb extends Item {
     }
     
      /**
-     * To get the height of the bullet
+     * To get the height of the bomb
      * @return an <code>int</code> value with the height
      */
     public int getHeight() {
@@ -68,14 +67,14 @@ public class Bomb extends Item {
 
     
      /**
-     * Set the direction in Y of the bullet
+     * Set the direction in Y of the bomb
      * @param velY <b>velY</b> value with the direction
      */
     public void setVelY(int velY) {
         this.velY = velY;
     }
      /**
-     * Set the width of the bullet
+     * Set the width of the bomb
      * @param width <b>width</b> value with the width
      */
     public void setWidth(int width) {
@@ -83,19 +82,25 @@ public class Bomb extends Item {
     }
 
      /**
-     * Set the height of the bullet
+     * Set the height of the bomb
      * @param height <b>height</b> value with the height
      */
     public void setHeight(int height) {
         this.height = height;
     }
     
-
+    /**
+     * To get the status of the bomb
+     * @return an <code>boolean</code> value with the status
+     */
     public boolean isDead() {
         return dead;
     }
     
-
+     /**
+     * Set the status of the bomb
+     * @param dead <b>dead</b> value with the status
+     */
     public void setDead(boolean dead) {
         this.dead = dead;
     }
@@ -104,14 +109,14 @@ public class Bomb extends Item {
     
     @Override
     public void tick() {
-        //change animation of the bullet
+        //change animation of the bomb
         if(!dead){
         this.animationBomb.tick();
 
             if(y>game.getHeight()){
                 dead=true;
             }
-            //set direction of movement of the bullet
+            //set direction of movement of the bomb
             setY(getY() - velY);
         }
     }

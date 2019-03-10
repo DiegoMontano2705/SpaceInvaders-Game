@@ -14,12 +14,12 @@ import java.awt.Rectangle;
  */
 public class Player extends Item {
 
-    private int direction;
-    private int width;
-    private int height;
-    private int speed;
-    private Game game;
-    private int lifes;
+    private int direction;                  // to store the direction of the player
+    private int width;                      // to store the width of the player
+    private int height;                     // to store the height of the player
+    private int speed;                      // to store the speed of the player
+    private Game game;                      // to store the game where is the player
+    private int lifes;                      // to store the lifes of the player
     private Animation animationPlayer;      //to store the animation of the player
      /**
      * to create player with every attribute it have
@@ -38,7 +38,7 @@ public class Player extends Item {
         this.height = height;
         this.game = game;
         this.speed = 5;
-        this.lifes = 3;
+        this.lifes = 5;
         this.animationPlayer = new Animation(Assets.player,100);
     }
     /**
@@ -70,24 +70,30 @@ public class Player extends Item {
         this.direction = direction;
     }
     /**
-     * Set the width of the bullet
+     * Set the width of the player
      * @param width <b>width</b> value with the width
      */
     public void setWidth(int width) {
         this.width = width;
     }
     /**
-     * Set the height of the bullet
+     * Set the height of the player
      * @param height <b>height</b> value with the height
      */
     public void setHeight(int height) {
         this.height = height;
     }
-
+    /**
+     * To get the lifes of the player
+     * @return an <code>int</code> value with the lifes
+     */
     public int getLifes() {
         return lifes;
     }
-
+    /**
+     * Set the lifes of the player
+     * @param lifes <b>lifes</b> value with the lifes
+     */
     public void setLifes(int lifes) {
         this.lifes = lifes;
     }
@@ -105,8 +111,11 @@ public class Player extends Item {
             if (game.getKeyManager().right) {
                 setX(getX() + speed);//Right
             }
+            //shoots bullet if space bar is pressed and bullet is destroyed
             if(game.getKeyManager().shoot && game.getBullet().isDead()){
                 game.setBullet(new Bullet(x-10+width/2, y, 20, 20, game));
+                
+                
             }
         
             
@@ -131,8 +140,7 @@ public class Player extends Item {
 
     @Override
     public void render(Graphics g) {
-        //Draw van image depending of the direction of the movement
-      
+        //Draw player animation
         g.drawImage(animationPlayer.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
             
     }

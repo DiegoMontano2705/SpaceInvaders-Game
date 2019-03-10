@@ -21,7 +21,6 @@ public class Resources {
 
     private Game game;
     private int size;
-    private LinkedList<PowerUp> powerUps;
     public Resources(Game game) {
         this.game = game;
     }
@@ -49,13 +48,7 @@ public class Resources {
                 fw.write(String.valueOf(game.getalien().get(i).getBomb().getY()) + "\n");
                 
             }
-            /*
-            fw.write(String.valueOf(game.getPowerUps().size()) + "\n");
-            for (int i = 0; i < game.getPowerUps().size(); i++) {
-                fw.write(String.valueOf(game.getPowerUps().get(i).getX()) + "\n");
-                fw.write(String.valueOf(game.getPowerUps().get(i).getY()) + "\n");
-            }
-            */
+           
             fw.close();
         } catch (IOException ex) {
             Logger.getLogger(Resources.class.getName()).log(Level.SEVERE, null, ex);
@@ -87,15 +80,7 @@ public class Resources {
                 game.getalien().get(i).getBomb().setY(Integer.parseInt(br.readLine()));
                 
             }
-            /*
-            powerUps = new LinkedList<PowerUp>();
-            size = Integer.parseInt(br.readLine());
-            for (int i = 0; i < size; i++) {
-                PowerUp power = new PowerUp(Integer.parseInt(br.readLine()),Integer.parseInt(br.readLine()), game);
-                powerUps.add(power);
-            }
-            game.setPowerUps(powerUps);
-            */
+          
             br.close();
 
         } catch (IOException ex) {
