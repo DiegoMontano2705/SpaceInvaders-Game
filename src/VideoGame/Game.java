@@ -37,8 +37,9 @@ public class Game implements Runnable {
     private boolean win;            // to manage if the game is ended and you win
     private Resources resources;    //To load and save the information of the game
     private int aliensOnGame;       // To store the number of aliens in the game
-    private int alienDirection;
+    private int alienDirection;     //To store alien direction
     private LinkedList<PowerUp> powerUps;        //To store a powerUp
+    private Bomb bomb;                  //To store a bomb
 
     /**
      * to create title, width and height and set the game is still not running
@@ -111,6 +112,24 @@ public class Game implements Runnable {
     }
 
     /**
+     * To get the Powerups objects
+     *
+     * @return an <code>Bomb</code> value with bomb
+     */
+    public Bomb getBombs() {
+        return bomb;
+    }
+
+    /**
+     * Set the powerUps objects
+     *
+     * @param bomb <b>Bomb</b> value with powerUps
+     */
+    public void setBombs(Bomb bomb) {
+        this.bomb = bomb;
+    }
+    
+     /**
      * To get the Powerups objects
      *
      * @return an <code>LinkedList</code> value with powerUps
@@ -187,6 +206,7 @@ public class Game implements Runnable {
                 alien.add(new Alien(iPosX, iPosY, 60, 30, this));
             }
         }
+        
 
         display.getJframe().addKeyListener(keyManager);
 
@@ -274,11 +294,14 @@ public class Game implements Runnable {
             if (!keyManager.pause) {
                 player.tick();
                 bullet.tick();
-
                 aliensOnGame = alien.size();
                 for (int i = 0; i < alien.size(); i++) {
                     Alien aliens = alien.get(i);
-
+                    //Para tirar la bomba
+                   // if (((int) (Math.random() * 20)) == 1) {
+                     //       bomb.add(new Bomb(aliens.getX(), aliens.getY(), this));
+                      //  }
+                    
                     if (aliens.isDead()) {
                         aliensOnGame = aliensOnGame - 1;
                     }
@@ -300,17 +323,14 @@ public class Game implements Runnable {
                         Assets.bounce.play();
                         aliens.setDead(true);
 
-                        /*if (((int) (Math.random() * 20)) == 1) {
-                            powerUps.add(new PowerUp(aliens.getX(), aliens.getY(), this));
-                        }
-                         */
+                      
                     }
                     if (aliens.getY() > height - 30 && !aliens.isDead()) {
                         gameOver = true;
                     }
                 }
 
-                // If there are no more bricks in the game (When you get 650 points), active bullet.EndGame to show Game Over image
+                // If there are no more aliens in the game. EndGame to show You Win image
                 if (aliensOnGame <= 0) {
                     win = true;
                     Assets.applause.play();

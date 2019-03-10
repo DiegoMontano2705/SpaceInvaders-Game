@@ -19,6 +19,7 @@ public class Player extends Item {
     private int height;
     private int speed;
     private Game game;
+    private int lifes;
     private Animation animationPlayer;      //to store the animation of the player
      /**
      * to create player with every attribute it have
@@ -37,6 +38,7 @@ public class Player extends Item {
         this.height = height;
         this.game = game;
         this.speed = 5;
+        this.lifes = 3;
         this.animationPlayer = new Animation(Assets.player,100);
     }
     /**
