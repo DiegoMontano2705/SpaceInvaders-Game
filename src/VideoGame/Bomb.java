@@ -36,7 +36,7 @@ public class Bomb extends Item {
         this.height = height;
         this.game = game;
         velY = -10;
-        dead=false;
+        dead=true;
         this.animationBomb = new Animation(Assets.bomb,100);
     }
     
@@ -107,10 +107,10 @@ public class Bomb extends Item {
         //change animation of the bullet
         if(!dead){
         this.animationBomb.tick();
-                if (getY() < 0) {
+
+            if(y>game.getHeight()){
                 dead=true;
             }
-            
             //set direction of movement of the bullet
             setY(getY() - velY);
         }

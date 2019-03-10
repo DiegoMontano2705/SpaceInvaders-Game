@@ -4,12 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/PatoSaldivar/Desktop/Videojuegos,%20Java/SpaceInvaders-Game/src/VideoGame/Player.java</file>
-            <file>file:/Users/PatoSaldivar/Desktop/Videojuegos,%20Java/SpaceInvaders-Game/src/VideoGame/Bullet.java</file>
             <file>file:/Users/PatoSaldivar/Desktop/Videojuegos,%20Java/SpaceInvaders-Game/src/VideoGame/KeyManager.java</file>
             <file>file:/Users/PatoSaldivar/Desktop/Videojuegos,%20Java/SpaceInvaders-Game/src/VideoGame/Resources.java</file>
             <file>file:/Users/PatoSaldivar/Desktop/Videojuegos,%20Java/SpaceInvaders-Game/src/VideoGame/Game.java</file>
-            <file>file:/Users/PatoSaldivar/Desktop/Videojuegos,%20Java/SpaceInvaders-Game/src/VideoGame/Assets.java</file>
             <file>file:/Users/PatoSaldivar/Desktop/Videojuegos,%20Java/SpaceInvaders-Game/src/VideoGame/Alien.java</file>
+            <file>file:/Users/PatoSaldivar/Desktop/Videojuegos,%20Java/SpaceInvaders-Game/src/VideoGame/Bomb.java</file>
         </group>
     </open-files>
 </project-private>

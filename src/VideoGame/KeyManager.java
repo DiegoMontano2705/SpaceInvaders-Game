@@ -38,10 +38,9 @@ public class KeyManager implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_P) {
             pause = !pause;
         }
-            //If pause is false the keys will become true, if not nothing happens
-            if (!pause) {
+            
                 keys[e.getKeyCode()] = true;
-            }
+            
         
     }
 
