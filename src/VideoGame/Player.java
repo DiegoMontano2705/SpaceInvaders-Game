@@ -83,6 +83,17 @@ public class Player extends Item {
     public void setHeight(int height) {
         this.height = height;
     }
+
+    public int getLifes() {
+        return lifes;
+    }
+
+    public void setLifes(int lifes) {
+        this.lifes = lifes;
+    }
+    
+    
+    
     @Override
     public void tick() {
          this.animationPlayer.tick();

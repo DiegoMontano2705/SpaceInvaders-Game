@@ -19,6 +19,7 @@ public class Alien extends Item {
     private Game game;
     private boolean dead;
     private int direction;
+    private Bomb bomb;
     
      /**
      * to create brick with every attribute it have
@@ -35,6 +36,7 @@ public class Alien extends Item {
         this.height = height;
         this.game = game;
         dead= false;
+        bomb = new Bomb(x,y,width/2,height/2,game);
     }
      /**
      * Set the the status of dead
@@ -85,6 +87,14 @@ public class Alien extends Item {
 
     public void setDirection(int direction) {
         this.direction = direction;
+    }
+
+    public Bomb getBomb() {
+        return bomb;
+    }
+
+    public void setBomb(Bomb bomb) {
+        this.bomb = bomb;
     }
 
     

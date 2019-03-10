@@ -35,6 +35,7 @@ public class Resources {
             fw.write(String.valueOf(game.getScore()) + "\n");
             fw.write(String.valueOf(game.getPlayer().getX()) + "\n");
             fw.write(String.valueOf(game.getPlayer().getY()) + "\n");
+             fw.write(String.valueOf(game.getPlayer().getLifes()) + "\n");   
             fw.write(String.valueOf(game.getBullet().getX()) + "\n");
             fw.write(String.valueOf(game.getBullet().getY()) + "\n");
             fw.write(String.valueOf(game.getBullet().getVelY()) + "\n");
@@ -43,6 +44,10 @@ public class Resources {
                 fw.write(String.valueOf(game.getalien().get(i).getX()) + "\n");
                 fw.write(String.valueOf(game.getalien().get(i).getY()) + "\n");
                 fw.write(String.valueOf(game.getalien().get(i).isDead()) + "\n");
+                fw.write(String.valueOf(game.getalien().get(i).getBomb().isDead()) + "\n");
+                fw.write(String.valueOf(game.getalien().get(i).getBomb().getX()) + "\n");
+                fw.write(String.valueOf(game.getalien().get(i).getBomb().getY()) + "\n");
+                
             }
             /*
             fw.write(String.valueOf(game.getPowerUps().size()) + "\n");
@@ -67,6 +72,7 @@ public class Resources {
             game.setScore(Integer.parseInt(br.readLine()));
             game.getPlayer().setX(Integer.parseInt(br.readLine()));
             game.getPlayer().setY(Integer.parseInt(br.readLine()));
+            game.getPlayer().setLifes(Integer.parseInt(br.readLine()));
             game.getBullet().setX(Integer.parseInt(br.readLine()));
             game.getBullet().setY(Integer.parseInt(br.readLine()));
             game.getBullet().setVelY(Integer.parseInt(br.readLine()));
@@ -76,6 +82,10 @@ public class Resources {
                 game.getalien().get(i).setX(Integer.parseInt(br.readLine()));
                 game.getalien().get(i).setY(Integer.parseInt(br.readLine()));
                 game.getalien().get(i).setDead(Boolean.parseBoolean(br.readLine()));
+                game.getalien().get(i).getBomb().setDead(Boolean.parseBoolean(br.readLine()));
+                game.getalien().get(i).getBomb().setX(Integer.parseInt(br.readLine()));
+                game.getalien().get(i).getBomb().setY(Integer.parseInt(br.readLine()));
+                
             }
             /*
             powerUps = new LinkedList<PowerUp>();

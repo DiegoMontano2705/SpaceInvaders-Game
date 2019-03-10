@@ -39,7 +39,6 @@ public class Game implements Runnable {
     private int aliensOnGame;       // To store the number of aliens in the game
     private int alienDirection;     //To store alien direction
     private LinkedList<PowerUp> powerUps;        //To store a powerUp
-    private Bomb bomb;                  //To store a bomb
 
     /**
      * to create title, width and height and set the game is still not running
@@ -112,24 +111,6 @@ public class Game implements Runnable {
     }
 
     /**
-     * To get the Powerups objects
-     *
-     * @return an <code>Bomb</code> value with bomb
-     */
-    public Bomb getBombs() {
-        return bomb;
-    }
-
-    /**
-     * Set the powerUps objects
-     *
-     * @param bomb <b>Bomb</b> value with powerUps
-     */
-    public void setBombs(Bomb bomb) {
-        this.bomb = bomb;
-    }
-    
-     /**
      * To get the Powerups objects
      *
      * @return an <code>LinkedList</code> value with powerUps
@@ -206,7 +187,6 @@ public class Game implements Runnable {
                 alien.add(new Alien(iPosX, iPosY, 60, 30, this));
             }
         }
-        
 
         display.getJframe().addKeyListener(keyManager);
 
@@ -216,10 +196,11 @@ public class Game implements Runnable {
         //Restart every value and object in the game 
         player.setX(getWidth() / 2 - 75);
         player.setY(getHeight() - 50);
+        player.setLifes(3);
         bullet.setDead(true);
         alienDirection = 1;
-        gameOver=false;
-        win=false;
+        gameOver = false;
+        win = false;
         int iPosX;
         int iPosY;
         int iRen;
@@ -278,16 +259,16 @@ public class Game implements Runnable {
     private void tick() {
         //Resets game if you press any key in GameOver or You Win screen
         //saves and load game tick
-            keyManager.tick();
-            if (keyManager.save) {
-                resources.saveGame();
-            }
-            if (keyManager.load) {
-                resources.loadGame();
-            }
-            if (keyManager.reset) {
-                this.reset();
-            }
+        keyManager.tick();
+        if (keyManager.save) {
+            resources.saveGame();
+        }
+        if (keyManager.load) {
+            resources.loadGame();
+        }
+        if (keyManager.reset) {
+            this.reset();
+        }
         if (!(gameOver || win)) {
 
             // avancing player and bricks and check collisions 
@@ -297,14 +278,8 @@ public class Game implements Runnable {
                 aliensOnGame = alien.size();
                 for (int i = 0; i < alien.size(); i++) {
                     Alien aliens = alien.get(i);
-                    //Para tirar la bomba
-                   // if (((int) (Math.random() * 20)) == 1) {
-                     //       bomb.add(new Bomb(aliens.getX(), aliens.getY(), this));
-                      //  }
                     
-                    if (aliens.isDead()) {
-                        aliensOnGame = aliensOnGame - 1;
-                    }
+                    
                     if ((aliens.getX() + aliens.getWidth() >= width && alienDirection != -1) || (aliens.getX() <= 0 && alienDirection != 1)) {
                         alienDirection = alienDirection * -1;
                         alien.forEach((alien2) -> {
@@ -312,31 +287,50 @@ public class Game implements Runnable {
                         });
 
                     }
-                    aliens.tick();
+                         aliens.tick();
+                         
+                    if (aliens.isDead()) {
+                        aliensOnGame = aliensOnGame - 1;
+                    } else {
+                        if (((int) (Math.random() * 1000)) == 1) {
+                            aliens.getBomb().setDead(false);
+                            aliens.getBomb().setX(aliens.getX());
+                            aliens.getBomb().setY(aliens.getY());
+                        }
+                        aliens.getBomb().tick();
+                        if(aliens.getBomb().intersecta(player) && !aliens.getBomb().isDead()){
+                            player.setLifes(player.getLifes()-1);
+                            aliens.getBomb().setDead(true);
+                        }
 
-                    //checks if bullet intersects brick
-                    if (bullet.intersecta(aliens) && !aliens.isDead() && !bullet.isDead()) {
-                        bullet.setDead(true);
-                        //Add points to score
-                        score = score + 10;
-                        //Plays sound everytime bullet hits brick
-                        Assets.bounce.play();
-                        aliens.setDead(true);
+                        //checks if bullet intersects brick
+                        if (bullet.intersecta(aliens) && !aliens.isDead()) {
+                            bullet.setDead(true);
+                            //Add points to score
+                            score = score + 10;
+                            //Plays sound everytime bullet hits brick
+                            Assets.bounce.play();
+                            aliens.setDead(true);
+                            aliens.getBomb().setDead(true);
 
-                      
+                        }
+                        if (aliens.getY() > height - 30 && !aliens.isDead()) {
+                            gameOver = true;
+                        }
                     }
-                    if (aliens.getY() > height - 30 && !aliens.isDead()) {
-                        gameOver = true;
-                    }
-                }
 
-                // If there are no more aliens in the game. EndGame to show You Win image
-                if (aliensOnGame <= 0) {
-                    win = true;
-                    Assets.applause.play();
-                }
-                if (gameOver) {
-                    Assets.boo.play();
+                    // If there are no more aliens in the game. EndGame to show You Win image
+                   if(player.getLifes()<0){
+                       gameOver=true;
+                   }
+                    
+                    if (aliensOnGame <= 0) {
+                        win = true;
+                        Assets.applause.play();
+                    }
+                    if (gameOver) {
+                        Assets.boo.play();
+                    }
                 }
             }
 
@@ -378,6 +372,9 @@ public class Game implements Runnable {
                     Alien aliens = alien.get(i);
                     if (!aliens.isDead()) {
                         aliens.render(g);
+                        if(!aliens.getBomb().isDead()){
+                            aliens.getBomb().render(g);
+                        }
                     }
                 }
                 for (int i = 0; i < powerUps.size(); i++) {
@@ -389,6 +386,7 @@ public class Game implements Runnable {
                 g.setFont(small);
                 g.setColor(Color.white);
                 g.drawString("Score:" + this.getScore(), getWidth() - 100, getHeight() - 20);
+                g.drawString("Lifes left: " + player.getLifes(), 10, getHeight() - 20);
                 if (keyManager.pause) {
                     g.setColor(new Color(0, 32, 48));
                     g.fillRect(50, width / 2 - 30, width - 100, 50);
